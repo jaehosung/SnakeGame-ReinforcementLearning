@@ -93,13 +93,13 @@ def main():
             
             pygame.draw.rect(screen,GREEN,Rect(apple,BLOCKSIZE))
             pygame.display.flip()
-            clock.tick(8)
+            clock.tick(40)
             
             for e in s:
                 pygame.draw.rect(screen,BLUE,Rect(e,BLOCKSIZE))
                 pygame.display.flip()
-                clock.tick(8)
-                
+                clock.tick(40)
+
             font = pygame.font.SysFont("arial", 64)
             text_surface = font.render("NAKER", True, BLUE)
             screen.blit(text_surface, (220,180))
@@ -123,7 +123,7 @@ def main():
                 if pressed_keys[K_q]: exit()
                 if pressed_keys[K_s]: break
 
-                clock.tick(10)
+                clock.tick(40)
 
 
         while not snakedead:
@@ -151,9 +151,8 @@ def main():
                         exit()
                 pressed_keys = pygame.key.get_pressed()
                 if pressed_keys[K_r]:
-                    gamepaused = 0 
-                clock.tick(10)
-
+                    gamepaused = 0
+                clock.tick(40)
 
             ### added gameregulator because setting a very low clock ticks
             ### caused the keyboard input to be hit and miss.  So I up the
@@ -279,7 +278,7 @@ def main():
 
             gameregulator = gameregulator + 1
             
-            clock.tick(25)
+            clock.tick(40)
 
 
         ##### if the snake is dead then it's game over
@@ -307,8 +306,9 @@ def main():
                 if pressed_keys[K_q]: exit()
                 if pressed_keys[K_n]: break
 
-                clock.tick(10)
-    
+                clock.tick(40)
+
+
 if __name__ == '__main__':
     main()
 
