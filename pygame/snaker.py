@@ -67,7 +67,7 @@ def main():
 
         TRUE = 1
         FALSE = 0
-        
+
 
         ######## VARIABLES
 
@@ -82,10 +82,11 @@ def main():
         snakedead = FALSE
         gameregulator = 6
         gamepaused = 0
-        growsnake = 0  # added to grow tail by two each time 
+        growsnake = 0  # added to grow tail by two each time
         snakegrowunit = 2 # added to grow tail by two each time
-        
-        
+
+
+
         pygame.init()
         clock = pygame.time.Clock()
         screen = pygame.display.set_mode(WINSIZE)
@@ -99,17 +100,18 @@ def main():
             for event in pygame.event.get():
                 if event.type == QUIT:
                     exit()
-                    
+
             pressed_keys = pygame.key.get_pressed()
-            
+
             if pressed_keys[K_LEFT]: newdirection = LEFT
             if pressed_keys[K_RIGHT]: newdirection = RIGHT
             if pressed_keys[K_UP]: newdirection = UP
             if pressed_keys[K_DOWN]: newdirection = DOWN
             if pressed_keys[K_q]: snakedead = TRUE
-            if pressed_keys[K_p]: gamepaused = 1
 
-            
+
+
+            #TODO Find the meanign of variable gameregulator
             if gameregulator == 6:
 
                 ####### lets make sure we can't go back the reverse direction
@@ -125,27 +127,27 @@ def main():
 
                 elif newdirection == DOWN and not direction == UP:
                     direction = newdirection
-                    
+
                 ##### now lets move the snake according to the direction
                 ##### if we hit the wall the snake dies
                 ##### need to make it less twitchy when you hit the walls
-                    
+
 
                 if direction == RIGHT:
                     snakexy[0] = snakexy[0] + SNAKESTEP
                     if snakexy[0] > MAXX:
                         snakedead = TRUE
-                    
+
                 elif direction == LEFT:
                     snakexy[0] = snakexy[0] - SNAKESTEP
                     if snakexy[0] < MINX:
                         snakedead = TRUE
-                        
+
                 elif direction == UP:
                     snakexy[1] = snakexy[1] - SNAKESTEP
                     if snakexy[1] < MINY:
                         snakedead = TRUE
-                        
+
                 elif direction == DOWN:
                     snakexy[1] = snakexy[1] + SNAKESTEP
                     if snakexy[1] > MAXY:
@@ -154,15 +156,16 @@ def main():
                 ### is the snake crossing over itself
                 ### had to put the > 1 test in there as I was
                 ### initially matching on first pass otherwise - not sure why
-                        
-                if len(snakelist) > 3 and snakelist.count(snakexy) > 0: 
-                    snakedead = TRUE
-                
 
-                        
+                if len(snakelist) > 3 and snakelist.count(snakexy) > 0:
+                    snakedead = TRUE
+
+                ###########################################################
+
+
                 #### generate an apple at a random position if one is not on screen
                 #### make sure apple never appears in snake position
-                    
+
                 if appleonscreen == 0:
                     good = FALSE
                     while good == FALSE:
@@ -188,32 +191,17 @@ def main():
                         growsnake = 0
                 else:
                     snakelist.pop()
-                    
-                
+
+
 
                 gameregulator = 0
 
 
             ###### RENDER THE SCREEN ###############
-            
+
             ###### Clear the screen
             screen.fill(BLACK)
-            #
-            # ###### Draw the screen borders
-            # ### horizontals
-            # pygame.draw.line(screen,BLUE,(0,9),(799,9),20)
-            # pygame.draw.line(screen,BLUE,(0,590),(799,590),20)
-            # pygame.draw.line(screen,BLUE,(0,69),(799,69),20)
-            # ### verticals
-            # pygame.draw.line(screen,BLUE,(9,0),(9,599),20)
-            # pygame.draw.line(screen,BLUE,(789,0),(789,599),20)
-            
-            ###### Print the score
-            # font = pygame.font.SysFont("arial", 38)
-            # text_surface = font.render("SNAKER!          Score: " + str(score), True, BLUE)
-            # screen.blit(text_surface, (50,18))
-
-            ###### Output the array elements to the screen as rectangles ( the snake)
+                  ###### Output the array elements to the screen as rectangles ( the snake)
             for element in snakelist:
                 pygame.draw.rect(screen,RED,Rect(element,BLOCKSIZE))
 
@@ -226,36 +214,9 @@ def main():
 
 
             gameregulator = gameregulator + 1
-            
+
             clock.tick(100)
 
-
-        ##### if the snake is dead then it's game over
-
-        # if snakedead == TRUE:
-            # screen.fill(BLACK)
-            # font = pygame.font.SysFont("arial", 48)
-            # text_surface = font.render("GAME OVER", True, BLUE)
-            # screen.blit(text_surface, (250,200))
-            # text_surface = font.render("Your Score: " + str (score), True, BLUE)
-            # screen.blit(text_surface, (250,300))
-            # font = pygame.font.SysFont("arial", 24)
-            # text_surface = font.render("Press q to quit", True, BLUE)
-            # screen.blit(text_surface, (300,400))
-            # text_surface = font.render("Press n to play again", True, BLUE)
-            # screen.blit(text_surface, (275,450))
-            #
-            # pygame.display.flip()
-            # while 1:
-            #     for event in pygame.event.get():
-            #         if event.type == QUIT:
-            #             exit()
-            #
-            #     pressed_keys = pygame.key.get_pressed()
-            #     if pressed_keys[K_q]: exit()
-            #     if pressed_keys[K_n]: break
-            #
-            #     clock.tick(100)
 
 
 if __name__ == '__main__':
