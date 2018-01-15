@@ -40,22 +40,31 @@ def main():
     while 1:
         ######## CONSTANTS
 
-        WINSIZE = [800,600]
+        WINSIZE = [200,200]
+
         WHITE = [255,255,255]
         BLACK = [0,0,0]
         RED = [255,0,0]
         GREEN = [0,255,0]
-        BLUE = [0,0,255]
+
+
         BLOCKSIZE = [20,20]
+
         UP = 1
         DOWN = 3
         RIGHT = 2
         LEFT = 4
-        MAXX = 760
-        MINX = 20
-        MAXY = 560
-        MINY = 80
+
+        MAXX = WINSIZE[0]
+        MINX = 0
+        MAXY = WINSIZE[1]
+        MINY = 0
+
         SNAKESTEP = 20
+
+        X_apple = WINSIZE[0]/SNAKESTEP
+        Y_apple = WINSIZE[1]/SNAKESTEP
+
         TRUE = 1
         FALSE = 0
         
@@ -63,7 +72,7 @@ def main():
         ######## VARIABLES
 
         direction = RIGHT # 1=up,2=right,3=down,4=left
-        snakexy = [300,400]
+        snakexy = [0,WINSIZE[1]/2]
         snakelist = [[300,400],[280,400],[260,400]]
         counter = 0
         score = 0
@@ -83,49 +92,6 @@ def main():
         pygame.display.set_caption('SNAKER')
         screen.fill(BLACK)
 
-        #### show initial start screen
-        
-        if showstartscreen == TRUE:
-            showstartscreen = FALSE
-
-            s = [[180,120],[180,100],[160,100],[140,100],[120,100],[100,100],[100,120],[100,140],[100,160],[120,160],[140,160],[160,160],[180,160],[180,180],[180,200],[180,220],[160,220],[140,220],[120,220],[100,220],[100,200]]
-            apple = [100,200]
-            
-            pygame.draw.rect(screen,GREEN,Rect(apple,BLOCKSIZE))
-            pygame.display.flip()
-            clock.tick(40)
-            
-            for e in s:
-                pygame.draw.rect(screen,BLUE,Rect(e,BLOCKSIZE))
-                pygame.display.flip()
-                clock.tick(40)
-
-            font = pygame.font.SysFont("arial", 64)
-            text_surface = font.render("NAKER", True, BLUE)
-            screen.blit(text_surface, (220,180))
-            font = pygame.font.SysFont("arial", 24)
-            text_surface = font.render("Move the snake with the arrow keys to eat the apples", True, BLUE)
-            screen.blit(text_surface, (50,300))
-            text_surface = font.render("Avoid the walls and yourself !", True, BLUE)
-            screen.blit(text_surface, (50,350))
-            text_surface = font.render("Press s to start a new game - Press q to quit at any time", True, BLUE)
-            screen.blit(text_surface, (50,400))
-            text_surface = font.render("Press p to pause r to resume at any time", True, BLUE)
-            screen.blit(text_surface, (50,450))
-
-            pygame.display.flip()
-            while 1:
-                for event in pygame.event.get():
-                    if event.type == QUIT:
-                        exit()
-
-                pressed_keys = pygame.key.get_pressed()
-                if pressed_keys[K_q]: exit()
-                if pressed_keys[K_s]: break
-
-                clock.tick(40)
-
-
         while not snakedead:
 
             ###### get input events  ####
@@ -142,23 +108,6 @@ def main():
             if pressed_keys[K_DOWN]: newdirection = DOWN
             if pressed_keys[K_q]: snakedead = TRUE
             if pressed_keys[K_p]: gamepaused = 1
-
-            ### wait here if p key is pressed until p key is pressed again
-            
-            while gamepaused == 1:
-                for event in pygame.event.get():
-                    if event.type == QUIT:
-                        exit()
-                pressed_keys = pygame.key.get_pressed()
-                if pressed_keys[K_r]:
-                    gamepaused = 0
-                clock.tick(40)
-
-            ### added gameregulator because setting a very low clock ticks
-            ### caused the keyboard input to be hit and miss.  So I up the
-            ### gameticks and the input and screen refresh is at this rate
-            ### but the snake moving and all other logic is at the slower
-            ### "regulated" speed
 
             
             if gameregulator == 6:
@@ -217,8 +166,8 @@ def main():
                 if appleonscreen == 0:
                     good = FALSE
                     while good == FALSE:
-                        x = random.randrange(1,39)
-                        y = random.randrange(5,29)
+                        x = random.randrange(1,X_apple)
+                        y = random.randrange(1,Y_apple)
                         applexy = [int(x*SNAKESTEP),int(y*SNAKESTEP)]
                         if snakelist.count(applexy) == 0:
                             good = TRUE
@@ -249,20 +198,20 @@ def main():
             
             ###### Clear the screen
             screen.fill(BLACK)
-            
-            ###### Draw the screen borders
-            ### horizontals
-            pygame.draw.line(screen,BLUE,(0,9),(799,9),20)
-            pygame.draw.line(screen,BLUE,(0,590),(799,590),20)
-            pygame.draw.line(screen,BLUE,(0,69),(799,69),20)
-            ### verticals
-            pygame.draw.line(screen,BLUE,(9,0),(9,599),20)
-            pygame.draw.line(screen,BLUE,(789,0),(789,599),20)
+            #
+            # ###### Draw the screen borders
+            # ### horizontals
+            # pygame.draw.line(screen,BLUE,(0,9),(799,9),20)
+            # pygame.draw.line(screen,BLUE,(0,590),(799,590),20)
+            # pygame.draw.line(screen,BLUE,(0,69),(799,69),20)
+            # ### verticals
+            # pygame.draw.line(screen,BLUE,(9,0),(9,599),20)
+            # pygame.draw.line(screen,BLUE,(789,0),(789,599),20)
             
             ###### Print the score
-            font = pygame.font.SysFont("arial", 38)
-            text_surface = font.render("SNAKER!          Score: " + str(score), True, BLUE)
-            screen.blit(text_surface, (50,18))
+            # font = pygame.font.SysFont("arial", 38)
+            # text_surface = font.render("SNAKER!          Score: " + str(score), True, BLUE)
+            # screen.blit(text_surface, (50,18))
 
             ###### Output the array elements to the screen as rectangles ( the snake)
             for element in snakelist:
@@ -278,35 +227,35 @@ def main():
 
             gameregulator = gameregulator + 1
             
-            clock.tick(40)
+            clock.tick(100)
 
 
         ##### if the snake is dead then it's game over
-            
-        if snakedead == TRUE:
-            screen.fill(BLACK)
-            font = pygame.font.SysFont("arial", 48)
-            text_surface = font.render("GAME OVER", True, BLUE)
-            screen.blit(text_surface, (250,200))
-            text_surface = font.render("Your Score: " + str (score), True, BLUE)
-            screen.blit(text_surface, (250,300))
-            font = pygame.font.SysFont("arial", 24)
-            text_surface = font.render("Press q to quit", True, BLUE)
-            screen.blit(text_surface, (300,400))
-            text_surface = font.render("Press n to play again", True, BLUE)
-            screen.blit(text_surface, (275,450))
 
-            pygame.display.flip()
-            while 1:
-                for event in pygame.event.get():
-                    if event.type == QUIT:
-                        exit()
-
-                pressed_keys = pygame.key.get_pressed()
-                if pressed_keys[K_q]: exit()
-                if pressed_keys[K_n]: break
-
-                clock.tick(40)
+        # if snakedead == TRUE:
+            # screen.fill(BLACK)
+            # font = pygame.font.SysFont("arial", 48)
+            # text_surface = font.render("GAME OVER", True, BLUE)
+            # screen.blit(text_surface, (250,200))
+            # text_surface = font.render("Your Score: " + str (score), True, BLUE)
+            # screen.blit(text_surface, (250,300))
+            # font = pygame.font.SysFont("arial", 24)
+            # text_surface = font.render("Press q to quit", True, BLUE)
+            # screen.blit(text_surface, (300,400))
+            # text_surface = font.render("Press n to play again", True, BLUE)
+            # screen.blit(text_surface, (275,450))
+            #
+            # pygame.display.flip()
+            # while 1:
+            #     for event in pygame.event.get():
+            #         if event.type == QUIT:
+            #             exit()
+            #
+            #     pressed_keys = pygame.key.get_pressed()
+            #     if pressed_keys[K_q]: exit()
+            #     if pressed_keys[K_n]: break
+            #
+            #     clock.tick(100)
 
 
 if __name__ == '__main__':
