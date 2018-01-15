@@ -1,1 +1,5 @@
 # SnakeGame-ReinforcementLearning
+
+
+install 
+pygame
